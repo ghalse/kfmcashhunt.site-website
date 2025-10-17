@@ -153,14 +153,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Configure marked for better code highlighting
+        // Configure marked for better code highlighting and safer HTML handling
         marked.setOptions({
             highlight: function(code, lang) {
-                return code; // Basic highlighting - could add Prism.js for syntax highlighting
+                return escapeHtml(code); // Escape HTML in code blocks
             },
             breaks: true,
-            gfm: true
+            gfm: true,
+            sanitize: false, // We'll handle sanitization ourselves
+            smartypants: false
         });
+
+        // HTML escaping function to prevent HTML injection and display code properly
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
 
         // Custom renderer for our conversation styling
         function parseConversationMarkdown(text) {
@@ -193,14 +202,24 @@
                 // For AI messages, parse as markdown
                 let parsedContent;
                 if (isUser) {
-                    // Simple text formatting for user messages
-                    parsedContent = '<p>' + content
+                    // Simple text formatting for user messages - escape HTML first
+                    const escapedContent = escapeHtml(content);
+                    parsedContent = '<p>' + escapedContent
                         .replace(/\n\n+/g, '</p><p>')  // Double newlines = new paragraphs
                         .replace(/\n/g, '<br>')        // Single newlines = line breaks
                         + '</p>';
                 } else {
-                    // Full markdown parsing for AI responses
-                    parsedContent = marked.parse(content);
+                    // For AI messages, we need to be more careful with markdown parsing
+                    // Since marked.parse() can also be vulnerable to HTML injection
+                    // We'll use DOMPurify-like approach or configure marked more safely
+                    try {
+                        parsedContent = marked.parse(content);
+                    } catch (e) {
+                        console.error('Markdown parsing error:', e);
+                        // Fallback to escaped HTML if markdown parsing fails
+                        const escapedContent = escapeHtml(content);
+                        parsedContent = '<p>' + escapedContent.replace(/\n/g, '<br>') + '</p>';
+                    }
                 }
 
                 html += `

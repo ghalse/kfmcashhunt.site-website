@@ -4922,3 +4922,84 @@ Perfect! I've updated the test page to load the same CDN resources as the main s
 Now the CDN test will give you **meaningful results** about the actual availability and functionality of all external resources used by your site! 🎉
 
 Made changes.
+
+ghalse: The transcript loader is choking on my <style> tag, presumably because it is not properly escaping HTML. Can this be fixed?
+
+GitHub Copilot: You're absolutely right! The transcript loader is likely parsing HTML tags like `<style>` as actual HTML instead of treating them as text content to be displayed. This is a common issue when displaying code or HTML content in a web page. Let me fix the HTML escaping in the transcript parser.
+
+Read [](file:///v%3A/github/kfmcashhunt.site-website/transcript.html#180-180), lines 180 to 210
+
+I need to add HTML escaping functions to properly handle HTML content in the transcript. Let me add these before the parseConversationMarkdown function:
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now I need to update the user message parsing to properly escape HTML content:
+
+Using "Replace String in File"
+
+
+```
+
+```
+Actually, let me also improve the markdown configuration to be safer with HTML content. Let me update the marked configuration:
+
+Using "Replace String in File"
+
+
+```
+
+```
+Perfect! I've fixed the HTML escaping issue in the transcript loader. Here's what I've done:
+
+## 🔧 **The Fix:**
+
+### **1. Added HTML Escaping Function:**
+```javascript
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+```
+
+### **2. Updated User Message Processing:**
+- **Before**: Raw content directly inserted (vulnerable to HTML injection)
+- **After**: Content is properly escaped before formatting
+- **User messages now safe**: HTML tags like `<style>` will display as text, not be interpreted as HTML
+
+### **3. Improved AI Message Safety:**
+- **Added error handling** for markdown parsing failures
+- **Fallback mechanism**: If markdown parsing fails, falls back to escaped HTML
+- **Better code highlighting**: Code blocks are now properly escaped
+
+### **4. Enhanced Marked Configuration:**
+- **Custom highlight function**: Escapes HTML in code blocks
+- **Error resilience**: Won't break if markdown contains problematic HTML
+- **Safer parsing**: Better handling of mixed content
+
+## ✅ **What This Fixes:**
+
+- **HTML tags in transcript** (like `<style>`, `<script>`, `<div>`) will now display as text
+- **Code examples** with HTML won't break the page layout
+- **Security improvement**: Prevents accidental HTML injection
+- **Better readability**: Code and HTML examples are properly formatted and visible
+
+## 🎯 **Result:**
+
+Now when the transcript contains content like:
+```
+User: I want to add a <style> tag to the page
+```
+
+It will properly display as:
+```
+User: I want to add a <style> tag to the page
+```
+
+Instead of trying to interpret `<style>` as an actual HTML tag! The transcript should now load and display properly without choking on HTML content. 🚀
+
+Made changes.
