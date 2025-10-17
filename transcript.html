@@ -69,17 +69,22 @@
                         <i class="fas fa-arrow-left me-2"></i>
                         Back to Main Site
                     </a>
-                    <button id="downloadBtn" class="btn btn-outline-secondary">
+                    <button id="downloadBtn" class="btn btn-outline-secondary me-2">
                         <i class="fas fa-download me-2"></i>
                         Download as Text
                     </button>
+                    <a href="https://github.com/ghalse/kfmcashhunt.site-website" target="_blank" class="btn btn-outline-dark">
+                        <i class="fab fa-github me-2"></i>
+                        View Source Code
+                    </a>
                 </div>
             </header>
 
             <div class="alert alert-info mb-4">
                 <h5><i class="fas fa-info-circle me-2"></i>About This Transcript</h5>
                 <p class="mb-2">This page contains the complete development conversation between the user and GitHub Copilot AI that resulted in the creation of this website.</p>
-                <p class="mb-0">The conversation shows the iterative development process, from initial concept to the final polished application with all its features.</p>
+                <p class="mb-2">The conversation shows the iterative development process, from initial concept to the final polished application with all its features.</p>
+                <p class="mb-0"><strong>Source Code:</strong> All code generated in this conversation is available in the <a href="https://github.com/ghalse/kfmcashhunt.site-website" target="_blank" class="alert-link"><i class="fab fa-github me-1"></i>GitHub repository</a>.</p>
             </div>
 
             <!-- Development Summary -->
@@ -3515,6 +3520,57 @@ Perfect! ✅ I've fixed the validation bug. The issue was in the `validateSerial
 - ✅ No more stacking of "Valid format" messages
 
 The validation will now work correctly, showing only one feedback message at a time and properly clearing previous messages before displaying new ones! 🎉
+
+Made changes.
+
+ghalse: On the transcript page, can you add a link to the Github repo that has the source you generated? It is at https://github.com/ghalse/kfmcashhunt.site-website
+
+GitHub Copilot: I'll add a link to the GitHub repository on the transcript page. Let me check the current structure and add it in a logical place.
+
+Read [](file:///v%3A/public_html/kfm/transcript.html#50-50), lines 50 to 70
+
+Read [](file:///v%3A/public_html/kfm/transcript.html#65-65), lines 65 to 80
+
+Perfect! I'll add a GitHub link button next to the existing buttons. Let me add it to the button group:
+
+Using "Replace String in File"
+
+
+```
+
+```
+The lint error is unrelated to my change (it's in the JavaScript section). Let me also add a note about the repository in the "About This Transcript" section to make it more prominent:
+
+Read [](file:///v%3A/public_html/kfm/transcript.html#80-80), lines 80 to 90
+
+Using "Replace String in File"
+
+
+```
+
+```
+Perfect! ✅ I've added the GitHub repository link in two places on the transcript page:
+
+## 🔗 **GitHub Repository Links Added:**
+
+### **1. Button in Header Section:**
+- Added a new "View Source Code" button next to the existing "Back to Main Site" and "Download as Text" buttons
+- Uses GitHub's brand color (dark) and the GitHub icon (`fab fa-github`)
+- Opens in a new tab with `target="_blank"`
+
+### **2. Reference in About Section:**
+- Added a paragraph mentioning that all source code is available in the GitHub repository
+- Styled as an `alert-link` to match the info alert styling
+- Also opens in a new tab
+- Includes the GitHub icon for visual consistency
+
+## 🎨 **Design Features:**
+- **Consistent Styling**: Matches the existing button group and alert styling
+- **Clear Call-to-Action**: Both "View Source Code" button and text link are prominent
+- **Professional Appearance**: Uses appropriate GitHub branding
+- **Accessibility**: Opens in new tab so users don't lose their place on the transcript
+
+Now visitors can easily access the source code repository directly from the transcript page, making it clear where they can find all the code that was generated during the development conversation! 🎉
 
 Made changes.
 
