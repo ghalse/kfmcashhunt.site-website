@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS query_log (
     is_winner INTEGER NOT NULL DEFAULT 0,
     client_ip TEXT NOT NULL,
     query_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-    user_agent TEXT
+    user_agent TEXT,
+    client_fingerprint TEXT
 );
 
 -- Create indexes for better performance
@@ -23,6 +24,7 @@ CREATE INDEX IF NOT EXISTS idx_serial_number ON query_log(serial_number);
 CREATE INDEX IF NOT EXISTS idx_client_ip ON query_log(client_ip);
 CREATE INDEX IF NOT EXISTS idx_query_time ON query_log(query_time);
 CREATE INDEX IF NOT EXISTS idx_is_winner ON query_log(is_winner);
+CREATE INDEX IF NOT EXISTS idx_client_fingerprint ON query_log(client_fingerprint);
 
 -- Create a view for query statistics
 CREATE VIEW IF NOT EXISTS query_statistics AS

@@ -109,7 +109,8 @@ function createTables($pdo) {
                 is_winner INTEGER NOT NULL DEFAULT 0,
                 client_ip TEXT NOT NULL,
                 query_time DATETIME DEFAULT CURRENT_TIMESTAMP,
-                user_agent TEXT
+                user_agent TEXT,
+                client_fingerprint TEXT
             )
         ");
 
@@ -118,6 +119,7 @@ function createTables($pdo) {
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_client_ip ON query_log(client_ip)");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_query_time ON query_log(query_time)");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_is_winner ON query_log(is_winner)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_client_fingerprint ON query_log(client_fingerprint)");
 
     } catch (PDOException $e) {
         error_log("Table creation error: " . $e->getMessage());
@@ -189,14 +191,14 @@ function checkRateLimit($client_ip, $max_requests = 100) {
 /**
  * Log a query to the database
  */
-function logQuery($pdo, $serial_number, $is_winner, $client_ip, $user_agent = null) {
+function logQuery($pdo, $serial_number, $is_winner, $client_ip, $user_agent = null, $client_fingerprint = null) {
     try {
         $stmt = $pdo->prepare("
-            INSERT INTO query_log (serial_number, is_winner, client_ip, query_time, user_agent)
-            VALUES (?, ?, ?, datetime('now'), ?)
+            INSERT INTO query_log (serial_number, is_winner, client_ip, query_time, user_agent, client_fingerprint)
+            VALUES (?, ?, ?, datetime('now'), ?, ?)
         ");
 
-        $result = $stmt->execute([$serial_number, $is_winner, $client_ip, $user_agent]);
+        $result = $stmt->execute([$serial_number, $is_winner, $client_ip, $user_agent, $client_fingerprint]);
 
         if ($result) {
             return $pdo->lastInsertId();
@@ -212,10 +214,10 @@ function logQuery($pdo, $serial_number, $is_winner, $client_ip, $user_agent = nu
 /**
  * Get privacy-friendly previous query information
  */
-function getPreviousQueryInfo($pdo, $serial_number, $current_ip, $current_user_agent) {
+function getPreviousQueryInfo($pdo, $serial_number, $current_fingerprint) {
     try {
         $stmt = $pdo->prepare("
-            SELECT client_ip, query_time, is_winner, user_agent
+            SELECT client_fingerprint, query_time, is_winner
             FROM query_log
             WHERE serial_number = ?
             ORDER BY query_time ASC
@@ -235,9 +237,8 @@ function getPreviousQueryInfo($pdo, $serial_number, $current_ip, $current_user_a
         foreach ($results as $query) {
             $timestamps[] = $query['query_time'];
 
-            // Check if same IP and user agent (indicating same user)
-            if ($query['client_ip'] === $current_ip &&
-                $query['user_agent'] === $current_user_agent) {
+            // Check if same fingerprint (indicating same user)
+            if ($query['client_fingerprint'] === $current_fingerprint) {
                 $is_same_user = true;
             }
         }
@@ -384,6 +385,7 @@ try {
         case 'log_query':
             $serial_number = strtoupper(trim($input['serial_number'] ?? ''));
             $is_winner = (int)($input['is_winner'] ?? 0);
+            $client_fingerprint = trim($input['client_fingerprint'] ?? '');
             $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
             // Validate serial number
@@ -391,11 +393,16 @@ try {
                 sendResponse(false, null, 'Invalid serial number format', 400);
             }
 
+            // Validate client fingerprint (should be a UUID)
+            if (empty($client_fingerprint) || !preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $client_fingerprint)) {
+                sendResponse(false, null, 'Invalid client fingerprint', 400);
+            }
+
             // Check for previous queries of this serial number (privacy-friendly)
-            $previous_query_info = getPreviousQueryInfo($pdo, $serial_number, $client_ip, $user_agent);
+            $previous_query_info = getPreviousQueryInfo($pdo, $serial_number, $client_fingerprint);
 
             // Log the new query
-            $log_id = logQuery($pdo, $serial_number, $is_winner, $client_ip, $user_agent);
+            $log_id = logQuery($pdo, $serial_number, $is_winner, $client_ip, $user_agent, $client_fingerprint);
 
             $response_data = [
                 'logged' => $log_id !== false,

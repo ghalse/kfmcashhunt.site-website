@@ -65,6 +65,34 @@ $(document).ready(function() {
         return checkedSerials.includes(serialNumber);
     }
 
+    // Client fingerprint functions
+    function generateUUID() {
+        // Simple UUID v4 generation
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0;
+            const v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+
+    function getClientFingerprint() {
+        try {
+            let fingerprint = localStorage.getItem('kfm_client_fingerprint');
+            if (!fingerprint) {
+                fingerprint = generateUUID();
+                localStorage.setItem('kfm_client_fingerprint', fingerprint);
+            }
+            return fingerprint;
+        } catch (e) {
+            console.warn('Error with client fingerprint:', e);
+            // Fallback to session-based UUID if localStorage fails
+            if (!window.kfm_session_fingerprint) {
+                window.kfm_session_fingerprint = generateUUID();
+            }
+            return window.kfm_session_fingerprint;
+        }
+    }
+
     function setupEventListeners() {
         // Serial form submission
         $('#serialForm').on('submit', function(e) {
@@ -303,7 +331,8 @@ $(document).ready(function() {
             data: {
                 action: 'log_query',
                 serial_number: serialNumber,
-                is_winner: isWinner ? 1 : 0
+                is_winner: isWinner ? 1 : 0,
+                client_fingerprint: getClientFingerprint()
             },
             success: function(response) {
                 if (response.success) {
