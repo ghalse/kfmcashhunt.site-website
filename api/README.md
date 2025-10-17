@@ -5,8 +5,7 @@ This directory contains the PHP backend API that needs to be hosted on **api.kfm
 ## Files in this directory:
 
 - `index.php` - Main API endpoint
-- `database_setup.sql` - MySQL database schema
-- `config.sample.php` - Configuration template
+- `database_setup_sqlite.sql` - SQLite3 database schema (optional)
 - `README.md` - This file
 
 ## Setup Instructions for mombe.org

@@ -1,10 +1,10 @@
-# R20 Competition Website
+# Kfm Mornings Cash Hunt Website
 
-A responsive web application for checking R20 banknote serial numbers in a radio station competition.
+A responsive web application for checking R20 banknote serial numbers in the Kfm Mornings Cash Hunt competition to win R100,000.
 
 ## 🚀 Live Demo
 
-- **Frontend (GitHub Pages)**: Your GitHub Pages URL will be here after deployment
+- **Frontend (GitHub Pages)**: https://kfmcashhunt.site/
 - **API (api.kfmcashhunt.site)**: https://api.kfmcashhunt.site/
 
 ## 🎯 Features
@@ -23,13 +23,13 @@ A responsive web application for checking R20 banknote serial numbers in a radio
 ├── style.css              # Custom styling and responsive design
 ├── app.js                 # Client-side logic and API communication
 ├── test.html              # Testing and debugging page
-├── api/                   # Backend API (deploy to mombe.org)
+├── api/                   # Backend API (deploy to api.kfmcashhunt.site)
 │   ├── index.php          # Main API endpoint
-│   ├── database_setup.sql # MySQL schema
-│   ├── config.sample.php  # Configuration template
+│   ├── database_setup_sqlite.sql # SQLite3 schema (optional)
 │   └── README.md          # API-specific documentation
 ├── .github/workflows/     # GitHub Actions
 │   └── pages.yml          # Auto-deployment to GitHub Pages
+├── CNAME                  # Custom domain for GitHub Pages
 └── README.md              # This file
 ```
 
@@ -60,7 +60,7 @@ A responsive web application for checking R20 banknote serial numbers in a radio
    - The workflow will automatically deploy on push
 
 3. **Access your site**:
-   - URL: `https://your-username.github.io/repository-name/`
+   - URL: `https://kfmcashhunt.site/`
 
 ### Part 2: api.kfmcashhunt.site API Setup
 
@@ -70,15 +70,18 @@ A responsive web application for checking R20 banknote serial numbers in a radio
    # https://api.kfmcashhunt.site/
    ```
 
-2. **Database setup on api.kfmcashhunt.site**:
+2. **Configure environment**:
    ```bash
-   mysql -u your_user -p < api/database_setup.sql
+   # Set database path environment variable
+   export KFM_DB_PATH="/var/lib/kfm/r20_competition.db"
    ```
 
-3. **Configure API**:
-   - Copy `api/config.sample.php` to `api/config.php`
-   - Update database credentials in `api/index.php`
-   - Set file permissions: `chmod 644 *.php`
+3. **Test API**:
+   ```bash
+   curl -X POST https://api.kfmcashhunt.site/ -d '{"action":"health_check"}'
+   ```
+
+   Note: Database and tables will be created automatically on first access.
 
 ## 🧪 Testing
 
@@ -95,7 +98,7 @@ The static frontend communicates with the PHP API at `https://api.kfmcashhunt.si
 - Rate limiting and security features## 📖 Usage
 
 ### Manual Entry
-1. Visit your GitHub Pages URL
+1. Visit https://kfmcashhunt.site/
 2. Enter an 11-character serial number (format: AH12345678B)
 3. Click "Check Number" for instant results
 4. Winners get celebration effects! 🎉
