@@ -33,6 +33,38 @@ $(document).ready(function() {
         checkOCRSupport();
     }
 
+    // LocalStorage functions for tracking checked serials
+    function getCheckedSerials() {
+        try {
+            const stored = localStorage.getItem('kfm_checked_serials');
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            console.warn('Error reading localStorage:', e);
+            return [];
+        }
+    }
+
+    function addCheckedSerial(serialNumber) {
+        try {
+            const checkedSerials = getCheckedSerials();
+            if (!checkedSerials.includes(serialNumber)) {
+                checkedSerials.push(serialNumber);
+                // Keep only last 100 entries to avoid localStorage bloat
+                if (checkedSerials.length > 100) {
+                    checkedSerials.shift();
+                }
+                localStorage.setItem('kfm_checked_serials', JSON.stringify(checkedSerials));
+            }
+        } catch (e) {
+            console.warn('Error writing to localStorage:', e);
+        }
+    }
+
+    function hasCheckedSerial(serialNumber) {
+        const checkedSerials = getCheckedSerials();
+        return checkedSerials.includes(serialNumber);
+    }
+
     function setupEventListeners() {
         // Serial form submission
         $('#serialForm').on('submit', function(e) {
@@ -116,6 +148,14 @@ $(document).ready(function() {
             return false;
         } else {
             $input.removeClass('is-invalid').addClass('is-valid');
+
+            // Check if this serial was previously checked by this user
+            if (hasCheckedSerial(serialNumber)) {
+                $input.after('<div class="valid-feedback"><i class="fas fa-check-circle me-1"></i>Valid format - Previously checked by you</div>');
+            } else {
+                $input.after('<div class="valid-feedback"><i class="fas fa-check-circle me-1"></i>Valid format</div>');
+            }
+
             return true;
         }
     }
@@ -123,7 +163,7 @@ $(document).ready(function() {
     function clearValidationStyles() {
         const $input = $('#serialInput');
         $input.removeClass('is-valid is-invalid');
-        $input.next('.invalid-feedback, .valid-feedback').remove();
+        $input.nextAll('.invalid-feedback, .valid-feedback').remove();
     }
 
     function processSerialNumber() {
@@ -151,6 +191,9 @@ $(document).ready(function() {
 
             // Display result
             displayResult(serialNumber, isWinner);
+
+            // Store this serial in localStorage as checked by this user
+            addCheckedSerial(serialNumber);
 
             // Log query to server
             logQuery(serialNumber, isWinner);
@@ -264,6 +307,8 @@ $(document).ready(function() {
             },
             success: function(response) {
                 if (response.success) {
+                    // Store this serial in localStorage as checked by this user
+                    addCheckedSerial(serialNumber);
                     displayQueryHistory(response.data);
                 }
             },
