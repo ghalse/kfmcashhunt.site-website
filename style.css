@@ -1,23 +1,27 @@
 /* Custom styles for R20 Competition website */
 
 :root {
-    --primary-color: #007bff;
-    --success-color: #28a745;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --info-color: #17a2b8;
-    --light-bg: #f8f9fa;
-    --dark-text: #343a40;
+    /* R20 Note inspired colors */
+    --primary-color: #d4742a; /* Rich orange/brown from R20 */
+    --secondary-color: #b8651f; /* Darker orange/brown */
+    --success-color: #2d5a3d; /* Deep green from R20 foliage */
+    --warning-color: #e8a547; /* Golden yellow from R20 accents */
+    --danger-color: #8b4513; /* Saddle brown for errors */
+    --info-color: #a67c52; /* Warm brown from R20 */
+    --light-bg: #f7f3e9; /* Cream/ivory like R20 paper */
+    --dark-text: #3d2914; /* Dark brown text */
+    --gold-accent: #ffd700; /* Gold highlights */
+    --copper-accent: #b87333; /* Copper tones */
 }
 
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #d4742a 0%, #b8651f 50%, #a67c52 100%);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
 }
 
 .container-fluid {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(247, 243, 233, 0.95);
     backdrop-filter: blur(10px);
     min-height: 100vh;
 }
@@ -25,18 +29,26 @@ body {
 h1 {
     font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    color: var(--dark-text);
+}
+
+h1 .fas {
+    color: var(--gold-accent);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .card {
-    border: none;
+    border: 2px solid var(--copper-accent);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: var(--light-bg);
 }
 
 .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 15px rgba(212, 116, 42, 0.15);
+    border-color: var(--gold-accent);
 }
 
 .card-header {
@@ -73,26 +85,28 @@ h1 {
 
 #serialInput:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(212, 116, 42, 0.25);
 }
 
 .winner-result {
-    background: linear-gradient(45deg, #28a745, #20c997);
+    background: linear-gradient(45deg, var(--success-color), var(--gold-accent));
     color: white;
     padding: 2rem;
     border-radius: 15px;
     animation: celebrateWin 2s ease-in-out;
+    border: 3px solid var(--gold-accent);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
 }
 
 .loser-result {
-    background: linear-gradient(45deg, #dc3545, #fd7e14);
+    background: linear-gradient(45deg, var(--danger-color), var(--copper-accent));
     color: white;
     padding: 2rem;
     border-radius: 15px;
 }
 
 .previous-query {
-    background: linear-gradient(45deg, #ffc107, #fd7e14);
+    background: linear-gradient(45deg, var(--warning-color), var(--copper-accent));
     color: white;
     padding: 1rem;
     border-radius: 10px;
@@ -110,7 +124,7 @@ h1 {
     position: absolute;
     width: 10px;
     height: 10px;
-    background: #ff6b6b;
+    background: var(--gold-accent);
     animation: confettiFall 3s linear infinite;
 }
 
@@ -232,4 +246,190 @@ h1 {
     font-size: 0.875rem;
     margin-top: 0.25rem;
     color: var(--success-color);
+}
+
+/* Additional R20 note inspired styling */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.btn-success:hover {
+    background-color: #245235;
+    border-color: #245235;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.btn-outline-secondary {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-outline-dark {
+    color: var(--dark-text);
+    border-color: var(--dark-text);
+}
+
+.btn-outline-dark:hover {
+    background-color: var(--dark-text);
+    border-color: var(--dark-text);
+    color: white;
+}
+
+.bg-success {
+    background-color: var(--success-color) !important;
+}
+
+.bg-info {
+    background-color: var(--info-color) !important;
+}
+
+/* R20 note texture effect */
+.card-body {
+    position: relative;
+}
+
+.card-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 50%, transparent 20px, rgba(255, 215, 0, 0.05) 21px),
+        radial-gradient(circle at 80% 50%, transparent 20px, rgba(184, 101, 31, 0.05) 21px);
+    pointer-events: none;
+    border-radius: 13px;
+}
+
+/* Enhanced money bill icon styling */
+.fa-money-bill-wave {
+    background: linear-gradient(45deg, var(--gold-accent), var(--warning-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Subtle paper texture for the main container */
+.container-fluid::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        linear-gradient(45deg, transparent 40%, rgba(212, 116, 42, 0.02) 50%, transparent 60%),
+        linear-gradient(-45deg, transparent 40%, rgba(184, 101, 31, 0.02) 50%, transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Better contrast for bottom text elements */
+.text-center.pb-3 p {
+    color: var(--dark-text) !important;
+    text-shadow: 0 1px 2px rgba(247, 243, 233, 0.8);
+}
+
+.text-center.pb-3 a {
+    color: var(--secondary-color) !important;
+    text-shadow: 0 1px 2px rgba(247, 243, 233, 0.8);
+}
+
+.text-center.pb-3 a:hover {
+    color: var(--primary-color) !important;
+    text-decoration: underline !important;
+}
+
+/* Improved footer text contrast */
+footer .text-muted {
+    color: var(--dark-text) !important;
+}
+
+/* Fix for transcript link and main page elements */
+#transcriptLink {
+    color: var(--secondary-color) !important;
+    text-shadow: 0 1px 2px rgba(247, 243, 233, 0.8);
+}
+
+#transcriptLink:hover {
+    color: var(--primary-color) !important;
+    text-decoration: underline !important;
+}
+
+/* Main container max-width */
+.main-container {
+    max-width: 600px;
+}
+
+/* Serial input styling */
+.serial-input {
+    letter-spacing: 2px;
+    font-family: monospace;
+}
+
+/* Hidden elements */
+.hidden {
+    display: none !important;
+}
+
+/* Image preview max height */
+.image-preview-max {
+    max-height: 300px;
+}
+
+/* Progress bar initial width */
+.progress-bar-zero {
+    width: 0%;
+}
+
+/* Footer acknowledgment text */
+.footer-acknowledgment {
+    font-size: 0.7rem;
+    color: var(--dark-text) !important;
+}
+
+/* Test page input spacing */
+.test-input-spacing {
+    margin: 10px 0;
+}
+
+.test-input {
+    padding: 5px;
+    margin: 0 10px;
 }

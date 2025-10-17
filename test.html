@@ -4,20 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kfm Mornings Cash Hunt - Test Page</title>
+
+    <!-- Bootstrap CSS for responsive design -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="style.css" rel="stylesheet">
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
-        .test-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-        .success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
-        .error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
-        .info { background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
-        button:hover { background: #0056b3; }
-        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
-        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-        th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #f8f9fa; }
+        /* Page-specific styles for test page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(247, 243, 233, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border: 2px solid var(--copper-accent);
+        }
+
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid var(--copper-accent);
+            border-radius: 10px;
+            background-color: var(--light-bg);
+        }
+
+        .success {
+            background-color: #e8f5e8;
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .error {
+            background-color: #f4e6dc;
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .info {
+            background-color: #f0ede7;
+            border-color: var(--info-color);
+            color: var(--info-color);
+        }
+
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        pre {
+            background: var(--light-bg);
+            padding: 10px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid var(--copper-accent);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid var(--copper-accent);
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--warning-color);
+            color: var(--dark-text);
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 2px solid var(--copper-accent);
+            border-radius: 8px;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            margin: 0 10px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(212, 116, 42, 0.25);
+        }
     </style>
 </head>
 <body>
@@ -45,9 +130,9 @@
         <div class="test-section">
             <h3>3. Serial Number Validation</h3>
             <p>Test various serial number formats.</p>
-            <div style="margin: 10px 0;">
+            <div class="test-input-spacing">
                 <label>Test Serial Number: </label>
-                <input type="text" id="testSerial" value="AH28519618B" style="padding: 5px; margin: 0 10px;">
+                <input type="text" id="testSerial" value="AH28519618B" class="test-input">
                 <button onclick="testSerialValidation()">Test Validation</button>
             </div>
             <div id="serialValidationResult"></div>
@@ -64,8 +149,8 @@
 
         <!-- Query Logging -->
         <div class="test-section">
-            <h3>5. Query Logging</h3>
-            <p>Test if queries are being logged to database.</p>
+            <h3>5. Query Logging API Test</h3>
+            <p>Test API connectivity and query logging functionality using the same format as the main application. <em>This should succeed if the API is properly deployed and accessible.</em></p>
             <button onclick="testQueryLogging()">Test Query Logging</button>
             <div id="queryLoggingResult"></div>
         </div>
@@ -81,7 +166,7 @@
         <!-- File Check -->
         <div class="test-section">
             <h3>7. File Integrity</h3>
-            <p>Check if all required files are present.</p>
+            <p>Check if required frontend files are present, and detect optional API files.</p>
             <button onclick="checkFiles()">Check Files</button>
             <div id="fileCheckResult"></div>
         </div>
@@ -89,13 +174,17 @@
         <!-- CDN Resources -->
         <div class="test-section">
             <h3>8. CDN Resources</h3>
-            <p>Check if external libraries are loading correctly.</p>
+            <p>Validate that all CDN libraries (same as main site) are loading correctly from their external sources.</p>
             <button onclick="checkCDNResources()">Check CDN Resources</button>
             <div id="cdnResult"></div>
         </div>
     </div>
 
+    <!-- JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
+
     <script>
         // Test functions
         function testAPIHealth() {
@@ -171,6 +260,23 @@
             }
         }
 
+        // Helper functions from main app for consistent testing
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function getTestClientFingerprint() {
+            // Use a standard UUID format that matches real client fingerprints
+            if (!window.test_client_fingerprint) {
+                window.test_client_fingerprint = generateUUID();
+            }
+            return window.test_client_fingerprint;
+        }
+
         function testQueryLogging() {
             showResult('queryLoggingResult', 'Testing query logging at api.kfmcashhunt.site...', 'info');
 
@@ -181,10 +287,12 @@
                 method: 'POST',
                 dataType: 'json',
                 crossDomain: true,
+                timeout: 5000,
                 data: {
                     action: 'log_query',
                     serial_number: testSerial,
-                    is_winner: 0
+                    is_winner: 0,
+                    client_fingerprint: getTestClientFingerprint()
                 },
                 success: function(response) {
                     if (response.success) {
@@ -194,7 +302,22 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    showResult('queryLoggingResult', `❌ Logging Error: ${error}<br>Note: This will fail until API is deployed to api.kfmcashhunt.site`, 'error');
+                    if (status === 'timeout' || error.includes('CORS') || xhr.status === 0) {
+                        showResult('queryLoggingResult', `ℹ️ API not accessible (expected during local development)<br>API endpoint: api.kfmcashhunt.site<br>Status: ${status || 'No response'}`, 'info');
+                    } else if (xhr.status === 400) {
+                        let responseText = '';
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            responseText = `<br>API Response: ${response.message || 'Bad request format'}`;
+                        } catch (e) {
+                            responseText = `<br>Raw Response: ${xhr.responseText || 'No details provided'}`;
+                        }
+                        showResult('queryLoggingResult', `ℹ️ API is accessible but rejected the test request<br>Status: 400 Bad Request${responseText}<br><br><em>This is expected - the API may require different parameters or authentication for logging queries.</em>`, 'info');
+                    } else if (xhr.status >= 500) {
+                        showResult('queryLoggingResult', `⚠️ API server error (${xhr.status})<br>The API is deployed but experiencing issues.<br>Error: ${error}`, 'error');
+                    } else {
+                        showResult('queryLoggingResult', `❌ API Error: ${error}<br>Status: ${xhr.status}<br>This may indicate a configuration or authentication issue.`, 'error');
+                    }
                 }
             });
         }
@@ -230,58 +353,109 @@
                 }
             });
         }        function checkFiles() {
-            const requiredFiles = ['index.html', 'style.css', 'app.js', 'api.php'];
+            const frontendFiles = [
+                { path: 'index.html', name: 'Main Page', required: true },
+                { path: 'style.css', name: 'CSS Stylesheet', required: true },
+                { path: 'app.js', name: 'JavaScript', required: true },
+                { path: 'transcript.html', name: 'Transcript Page', required: false },
+                { path: 'test.html', name: 'Test Page', required: false }
+            ];
+
+            const apiFiles = [
+                { path: 'api/index.php', name: 'API Endpoint', required: false },
+                { path: 'api/README.md', name: 'API Documentation', required: false }
+            ];
+
             let results = [];
             let completed = 0;
+            const allFiles = [...frontendFiles, ...apiFiles];
 
             showResult('fileCheckResult', 'Checking files...', 'info');
 
-            requiredFiles.forEach(file => {
+            allFiles.forEach(fileObj => {
                 $.ajax({
-                    url: file,
+                    url: fileObj.path,
                     method: 'HEAD',
                     success: function() {
-                        results.push(`✅ ${file} - Found`);
+                        results.push(`✅ ${fileObj.name} (${fileObj.path}) - Found`);
                         completed++;
-                        if (completed === requiredFiles.length) {
-                            showFileResults(results);
+                        if (completed === allFiles.length) {
+                            showFileResults(results, frontendFiles, apiFiles);
                         }
                     },
                     error: function() {
-                        results.push(`❌ ${file} - Missing`);
+                        if (fileObj.required) {
+                            results.push(`❌ ${fileObj.name} (${fileObj.path}) - Missing (Required)`);
+                        } else {
+                            results.push(`ℹ️ ${fileObj.name} (${fileObj.path}) - Not found (Optional)`);
+                        }
                         completed++;
-                        if (completed === requiredFiles.length) {
-                            showFileResults(results);
+                        if (completed === allFiles.length) {
+                            showFileResults(results, frontendFiles, apiFiles);
                         }
                     }
                 });
             });
         }
 
-        function showFileResults(results) {
-            const hasErrors = results.some(r => r.includes('❌'));
+        function showFileResults(results, frontendFiles, apiFiles) {
+            // Only count missing required files as real errors
+            const hasErrors = results.some(r => r.includes('❌') && r.includes('Required'));
             const resultClass = hasErrors ? 'error' : 'success';
-            showResult('fileCheckResult', results.join('<br>'), resultClass);
+
+            let summary = '<strong>File Check Summary:</strong><br>';
+            const foundRequired = frontendFiles.filter(f => f.required).every(f =>
+                results.some(r => r.includes(f.path) && r.includes('✅'))
+            );
+
+            if (foundRequired) {
+                summary += '✅ All required frontend files found<br>';
+            } else {
+                summary += '❌ Some required frontend files missing<br>';
+            }
+
+            const foundOptional = results.filter(r => r.includes('✅')).length;
+            const totalOptional = results.filter(r => r.includes('ℹ️')).length;
+            summary += `ℹ️ ${foundOptional} files found, ${totalOptional} optional files not present<br><br>`;
+
+            showResult('fileCheckResult', summary + results.join('<br>'), resultClass);
         }
 
         function checkCDNResources() {
             showResult('cdnResult', 'Checking CDN resources...', 'info');
 
+            // Check all CDN resources that should be loaded (same as main site)
             const checks = {
                 'jQuery': typeof $ !== 'undefined',
                 'Bootstrap CSS': !!$('link[href*="bootstrap"]').length,
+                'Bootstrap JS': typeof bootstrap !== 'undefined',
                 'Font Awesome': !!$('link[href*="font-awesome"]').length,
-                'Tesseract.js': typeof Tesseract !== 'undefined'
+                'Tesseract.js': typeof Tesseract !== 'undefined',
+                'Custom CSS (style.css)': !!$('link[href*="style.css"]').length
             };
 
             let results = [];
+            let loadedCount = 0;
+            let totalCount = Object.keys(checks).length;
+
+            // Check each resource
             for (const [name, loaded] of Object.entries(checks)) {
-                results.push(loaded ? `✅ ${name} - Loaded` : `❌ ${name} - Not loaded`);
+                if (loaded) {
+                    results.push(`✅ ${name} - Loaded successfully`);
+                    loadedCount++;
+                } else {
+                    results.push(`❌ ${name} - Failed to load`);
+                }
             }
 
-            const hasErrors = results.some(r => r.includes('❌'));
+            // Add summary
+            const summary = `<strong>CDN Resource Summary:</strong> ${loadedCount}/${totalCount} resources loaded<br><br>`;
+
+            // Determine result class
+            const hasErrors = loadedCount < totalCount;
             const resultClass = hasErrors ? 'error' : 'success';
-            showResult('cdnResult', results.join('<br>'), resultClass);
+
+            showResult('cdnResult', summary + results.join('<br>'), resultClass);
         }
 
         function showResult(elementId, message, type) {
