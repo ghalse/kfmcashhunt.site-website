@@ -5161,3 +5161,32 @@ The camera card will still properly prevent flashing on load because:
 This fix should restore the functionality where users can see success/failure results and history information when checking serial numbers.
 
 Made changes.
+
+ghalse: Can we fix the Access-Control-Allow-Origin. We can set it dynamically based on the Origin header, but should only allow origins within kfmcashhunt.site.
+
+GitHub Copilot: I'll help you fix the CORS configuration to dynamically allow origins only from the `kfmcashhunt.site` domain. Let me examine the current code and implement a more secure solution.
+
+Using "Replace String in File"
+
+
+```
+
+```
+I've updated the CORS configuration to be more secure by:
+
+1. **Dynamic Origin Validation**: The code now checks the `Origin` header from incoming requests
+2. **Domain Restriction**: Only allows origins from `kfmcashhunt.site` or its subdomains (e.g., `www.kfmcashhunt.site`, `api.kfmcashhunt.site`)
+3. **Security Enhancement**:
+   - Removed the wildcard `*` which was a security risk
+   - Added `Access-Control-Allow-Credentials: true` for authenticated requests when a valid origin is present
+   - For requests without a valid origin, no CORS header is set (better than using `*`)
+
+The key improvements:
+- Uses `parse_url()` to safely parse the origin
+- Uses `str_ends_with()` to check for subdomain matches
+- Only sets the `Access-Control-Allow-Origin` header when the origin is from your domain
+- Maintains backward compatibility for direct API calls (no origin header)
+
+This approach ensures that only your legitimate frontend domains can make cross-origin requests to the API, while still allowing direct server-to-server calls that don't include an origin header.
+
+Made changes.

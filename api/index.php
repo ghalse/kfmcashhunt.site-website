@@ -27,9 +27,36 @@ if (!extension_loaded('filter')) {
     die(json_encode(['error' => 'Filter extension is required but not loaded']));
 }
 
-// Set content type to JSON and CORS headers for GitHub Pages
+// Set content type to JSON and CORS headers
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *'); // In production, replace * with specific GitHub Pages URL
+
+// Dynamic CORS origin validation for kfmcashhunt.site domains
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowed_origin = '';
+
+if (!empty($origin)) {
+    // Parse the origin URL
+    $parsed_origin = parse_url($origin);
+
+    if ($parsed_origin && isset($parsed_origin['host'])) {
+        $host = strtolower($parsed_origin['host']);
+
+        // Allow exact domain match or any subdomain of kfmcashhunt.site
+        if ($host === 'kfmcashhunt.site' || str_ends_with($host, '.kfmcashhunt.site')) {
+            $allowed_origin = $origin;
+        }
+    }
+}
+
+// Set CORS headers
+if ($allowed_origin) {
+    header('Access-Control-Allow-Origin: ' . $allowed_origin);
+    header('Access-Control-Allow-Credentials: true');
+} else {
+    // For requests without origin (like direct API calls), don't set the header
+    // This provides better security than using *
+}
+
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Accept, Origin');
 header('Access-Control-Max-Age: 3600'); // Cache preflight for 1 hour
