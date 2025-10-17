@@ -5,6 +5,46 @@
  * Designed to be hosted separately from the static frontend
  */
 
+// PSR-12 use function declarations for required functions
+use function json_encode;
+use function json_decode;
+use function filter_var;
+use function file_get_contents;
+use function file_put_contents;
+use function extension_loaded;
+use function http_response_code;
+use function header;
+use function dirname;
+use function is_dir;
+use function mkdir;
+use function explode;
+use function trim;
+use function array_key_exists;
+use function time;
+use function file_exists;
+
+// Check JSON extension first since we need it for error responses
+if (!extension_loaded('json')) {
+    http_response_code(500);
+    die('{"error":"JSON extension is required but not loaded"}');
+}
+
+// Check other required extensions
+if (!extension_loaded('pdo')) {
+    http_response_code(500);
+    die(json_encode(['error' => 'PDO extension is required but not loaded']));
+}
+
+if (!extension_loaded('pdo_sqlite')) {
+    http_response_code(500);
+    die(json_encode(['error' => 'PDO SQLite extension is required but not loaded']));
+}
+
+if (!extension_loaded('filter')) {
+    http_response_code(500);
+    die(json_encode(['error' => 'Filter extension is required but not loaded']));
+}
+
 // Set content type to JSON and CORS headers for GitHub Pages
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *'); // In production, replace * with specific GitHub Pages URL
@@ -26,10 +66,36 @@ $db_path = $_ENV['KFM_DB_PATH'] ?? $_SERVER['KFM_DB_PATH'] ?? __DIR__ . '/r20_co
  */
 function getDbConnection($db_path) {
     try {
+        // Debug: Log the database path being used
+        error_log("Attempting to open database at: " . $db_path);
+
         // Ensure directory exists
         $dir = dirname($db_path);
+        error_log("Database directory: " . $dir);
+
         if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
+            error_log("Creating directory: " . $dir);
+            if (!mkdir($dir, 0755, true)) {
+                error_log("Failed to create directory: " . $dir);
+                throw new Exception("Cannot create database directory: " . $dir);
+            }
+        }
+
+        // Check directory permissions
+        if (!is_writable($dir)) {
+            error_log("Directory not writable: " . $dir);
+            throw new Exception("Database directory is not writable: " . $dir);
+        }
+
+        // Check if database file exists and its permissions
+        if (file_exists($db_path)) {
+            error_log("Database file exists, checking permissions...");
+            if (!is_writable($db_path)) {
+                error_log("Database file not writable: " . $db_path);
+                throw new Exception("Database file is not writable: " . $db_path);
+            }
+        } else {
+            error_log("Database file does not exist, will be created");
         }
 
         $pdo = new PDO(
@@ -43,12 +109,18 @@ function getDbConnection($db_path) {
             ]
         );
 
+        error_log("Database connection successful");
+
         // Create tables if they don't exist
         createTables($pdo);
 
         return $pdo;
     } catch (PDOException $e) {
-        error_log("Database connection error: " . $e->getMessage());
+        error_log("Database PDO error: " . $e->getMessage());
+        error_log("Database path was: " . $db_path);
+        return null;
+    } catch (Exception $e) {
+        error_log("Database general error: " . $e->getMessage());
         return null;
     }
 }
@@ -230,7 +302,30 @@ function sendResponse($success, $data = null, $message = '', $http_code = 200) {
     exit;
 }
 
-// Main API logic
+// Debug endpoint - GET request to see database configuration
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['debug'])) {
+    global $db_path;
+    $dir = dirname($db_path);
+
+    $debug_info = [
+        'database_path' => $db_path,
+        'database_directory' => $dir,
+        'directory_exists' => is_dir($dir),
+        'directory_writable' => is_dir($dir) ? is_writable($dir) : false,
+        'file_exists' => file_exists($db_path),
+        'file_writable' => file_exists($db_path) ? is_writable($db_path) : 'N/A',
+        'current_user' => get_current_user(),
+        'php_version' => PHP_VERSION,
+        'extensions' => [
+            'pdo' => extension_loaded('pdo'),
+            'pdo_sqlite' => extension_loaded('pdo_sqlite'),
+            'sqlite3' => extension_loaded('sqlite3')
+        ]
+    ];
+
+    echo json_encode($debug_info, JSON_PRETTY_PRINT);
+    exit;
+}// Main API logic
 try {
     // Only accept POST requests
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
