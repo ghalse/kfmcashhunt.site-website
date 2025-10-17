@@ -157,12 +157,9 @@ $(document).ready(function() {
 
     function validateSerialFormat(serialNumber) {
         const $input = $('#serialInput');
-        const $feedback = $('#serialInput').next('.invalid-feedback');
 
-        // Remove existing feedback
-        $feedback.remove();
-
-        // Expected format: 2 letters, 6-8 digits, 1 letter (e.g., RG7675642A or AH28519618B)
+        // Remove ALL existing feedback messages (both valid and invalid)
+        $input.nextAll('.invalid-feedback, .valid-feedback').remove();        // Expected format: 2 letters, 6-8 digits, 1 letter (e.g., RG7675642A or AH28519618B)
         const formatRegex = /^[A-Z]{2}[0-9]{6,8}[A-Z]$/;
 
         if (serialNumber.length === 0) {
