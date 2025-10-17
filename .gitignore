@@ -1,5 +1,8 @@
 # R20 Competition - Git Ignore File
 
+# VS Code workspace files
+*.code-workspace
+
 # Development files
 .DS_Store
 Thumbs.db
