@@ -57,6 +57,21 @@
             color: #a67c52;
             font-size: 0.875rem;
         }
+        .exchange-anchor {
+            color: var(--info-color);
+            text-decoration: none;
+            font-size: 0.8rem;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+        .exchange-anchor:hover {
+            opacity: 1;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        .conversation-item:hover .exchange-anchor {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -177,6 +192,7 @@
             // This regex is more restrictive to avoid matching URLs with colons
             const sections = text.split(/^(ghalse|GitHub Copilot):\s*/gim);
             let html = '';
+            let exchangeCounter = 1;
 
             // Process pairs of [speaker, content]
             for (let i = 1; i < sections.length; i += 2) {
@@ -223,10 +239,11 @@
                 }
 
                 html += `
-                    <div class="conversation-item ${messageClass}">
+                    <div id="exchange-${exchangeCounter}" class="conversation-item ${messageClass}">
                         <div class="message-header">
                             <i class="fas ${icon} me-2" style="${iconColor}"></i>
                             ${displayName}
+                            <a href="#exchange-${exchangeCounter}" class="exchange-anchor ms-2" title="Link to this exchange">#${exchangeCounter}</a>
                             <span class="timestamp ms-auto">Session</span>
                         </div>
                         <div class="message-content">
@@ -234,6 +251,7 @@
                         </div>
                     </div>
                 `;
+                exchangeCounter++;
             }
 
             return html;
