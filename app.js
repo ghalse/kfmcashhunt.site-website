@@ -73,18 +73,18 @@ $(document).ready(function() {
     }
 
     function formatSerialInput(input) {
-        // Convert to uppercase and remove invalid characters
-        let value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        // Convert to uppercase and remove whitespace, then remove invalid characters
+        let value = input.value.toUpperCase().replace(/\s+/g, '').replace(/[^A-Z0-9]/g, '');
 
-        // Limit to 11 characters
+        // Limit to 11 characters (max format: 2 letters + 8 digits + 1 letter)
         if (value.length > 11) {
             value = value.substring(0, 11);
         }
 
         input.value = value;
 
-        // Real-time validation
-        if (value.length === 11) {
+        // Real-time validation for valid lengths (9-11 characters)
+        if (value.length >= 9 && value.length <= 11) {
             validateSerialFormat(value);
         } else {
             clearValidationStyles();
@@ -98,8 +98,8 @@ $(document).ready(function() {
         // Remove existing feedback
         $feedback.remove();
 
-        // Expected format: 2 letters, 8 digits, 1 letter (e.g., AH28519618B)
-        const formatRegex = /^[A-Z]{2}[0-9]{8}[A-Z]$/;
+        // Expected format: 2 letters, 6-8 digits, 1 letter (e.g., RG7675642A or AH28519618B)
+        const formatRegex = /^[A-Z]{2}[0-9]{6,8}[A-Z]$/;
 
         if (serialNumber.length === 0) {
             clearValidationStyles();
@@ -108,7 +108,7 @@ $(document).ready(function() {
 
         if (!formatRegex.test(serialNumber)) {
             $input.removeClass('is-valid').addClass('is-invalid');
-            $input.after('<div class="invalid-feedback">Serial number should be in format: 2 letters + 8 digits + 1 letter (e.g., AH28519618B)</div>');
+            $input.after('<div class="invalid-feedback">Serial number should be in format: 2 letters + 6-8 digits + 1 letter (e.g., RG7675642A or AH28519618B)</div>');
             return false;
         } else {
             $input.removeClass('is-invalid').addClass('is-valid');
