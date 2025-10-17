@@ -109,9 +109,9 @@ The static frontend communicates with the PHP API at `https://api.kfmcashhunt.si
 3. Click "Process Image" to auto-extract serial number
 4. System validates and checks automatically
 
-## 🔌 API Endpoints (mombe.org)
+## 🔌 API Endpoints (example.org)
 
-### POST https://mombe.org/kfm/api/
+### POST https://example.org/kfm/api/
 
 **Available Actions:**
 - `health_check` - Test API status
@@ -120,7 +120,7 @@ The static frontend communicates with the PHP API at `https://api.kfmcashhunt.si
 
 **Example Request:**
 ```javascript
-fetch('https://mombe.org/kfm/api/', {
+fetch('https://example.org/kfm/api/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -167,9 +167,9 @@ fetch('https://mombe.org/kfm/api/', {
 - Ensure repository is public or Pages is enabled for private repos
 
 ### API Connection Issues
-- Test API health at: https://mombe.org/kfm/api/ (POST `{"action":"health_check"}`)
+- Test API health at: https://example.org/kfm/api/ (POST `{"action":"health_check"}`)
 - Check browser console for CORS errors
-- Verify mombe.org is accessible and PHP is working
+- Verify example.org is accessible and PHP is working
 
 ### OCR Not Working
 - Ensure stable internet (Tesseract.js loads from CDN)
@@ -197,7 +197,7 @@ Update `api/config.sample.php` and `api/index.php` for database settings.
 ## 📞 Support & Contributing
 
 - **Issues**: Use GitHub Issues for bug reports
-- **API Logs**: Check mombe.org server logs for backend issues
+- **API Logs**: Check example.org server logs for backend issues
 - **Browser Console**: F12 Developer Tools for frontend debugging
 - **Test Page**: Use `test.html` for comprehensive system testing
 

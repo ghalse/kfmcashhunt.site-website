@@ -8,7 +8,7 @@ This directory contains the PHP backend API that needs to be hosted on **api.kfm
 - `database_setup_sqlite.sql` - SQLite3 database schema (optional)
 - `README.md` - This file
 
-## Setup Instructions for mombe.org
+## Setup Instructions for example.org
 
 ### 1. Upload Files
 Upload all files in this `api/` directory to `https://api.kfmcashhunt.site/` on your web server.

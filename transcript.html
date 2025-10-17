@@ -274,8 +274,8 @@ Source: https://kfmcashhunt.site/transcript.html
     </script>
 
     <!-- Hidden Markdown Source - Paste your conversation markdown between the script tags below -->
-    <script type="text/plain" id="markdown-source">
-<![CDATA[
+    <script type="text/plain" id="markdown-source"><![CDATA[
+
 ghalse: A local radio station is running a competition. To win, you need to find one of fifty South African R20 notes that have been distributed. The winning bank notes are identified by their serial number.
 
 I would like to build a website that allows people to enter the serial number from their R20 note and compare it against the list of winning numbers.
@@ -1133,9 +1133,9 @@ Read [](file:///v%3A/public_html/kfm/test.html#120-120), lines 120 to 140
 
 I can see the issue - there's a formatting problem with missing newlines. Let me replace all the example.org references using a simpler approach:
 
-Ran terminal command: (Get-Content "v:\public_html\kfm\test.html") -replace "https://mombe\.org/kfm/api/", "https://api.kfmcashhunt.site/" | Set-Content "v:\public_html\kfm\test.html"
+Ran terminal command: (Get-Content "v:\public_html\kfm\test.html") -replace "https://example\.org/kfm/api/", "https://api.kfmcashhunt.site/" | Set-Content "v:\public_html\kfm\test.html"
 
-Ran terminal command: (Get-Content "v:\public_html\kfm\test.html") -replace "mombe\.org", "api.kfmcashhunt.site" | Set-Content "v:\public_html\kfm\test.html"
+Ran terminal command: (Get-Content "v:\public_html\kfm\test.html") -replace "example\.org", "api.kfmcashhunt.site" | Set-Content "v:\public_html\kfm\test.html"
 
 Now let me update the API's health check response to reflect the new server:
 
@@ -3517,7 +3517,7 @@ Perfect! ✅ I've fixed the validation bug. The issue was in the `validateSerial
 The validation will now work correctly, showing only one feedback message at a time and properly clearing previous messages before displaying new ones! 🎉
 
 Made changes.
-]]>
-    </script>
+
+]]></script>
 </body>
 </html>

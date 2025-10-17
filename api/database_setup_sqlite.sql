@@ -1,6 +1,6 @@
 -- R20 Competition Database Setup - SQLite3
 -- SQLite database schema for logging serial number queries
--- This file should be run on the server hosting the API (mombe.org)
+-- This file should be run on the server hosting the API (example.org)
 
 -- Note: SQLite will automatically create the database file when first accessed
 -- The API will automatically create tables if they don't exist
@@ -54,4 +54,4 @@ HAVING query_count > 1
 ORDER BY query_count DESC, first_query ASC;
 
 -- Show initial statistics
-SELECT 'SQLite3 database setup complete for mombe.org API!' as status;
+SELECT 'SQLite3 database setup complete for example.org API!' as status;
