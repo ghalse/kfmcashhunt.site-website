@@ -242,9 +242,19 @@ $(document).ready(function() {
                     <div class="text-center">
                         <i class="fas fa-trophy fa-4x mb-3 pulse"></i>
                         <h2 class="mb-3">🎉 CONGRATULATIONS! 🎉</h2>
-                        <h4 class="mb-3">You're entered to win R100,000!</h4>
+                        <h4 class="mb-3">You Found a Winning Number!</h4>
                         <p class="lead mb-3">Winning Serial Number: <strong>${serialNumber}</strong></p>
-                        <p class="mb-0">Contact Kfm Mornings immediately to enter the draw for R100,000!</p>
+                        <div class="alert alert-warning mt-3 mb-3">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>IMPORTANT:</strong> You must register your find to enter the R100,000 draw!
+                        </div>
+                        <a href="https://www.primediaplus.com/competitions/win-r100-000-in-the-kfm-mornings-cash-hunt/" 
+                           target="_blank" 
+                           class="btn btn-primary btn-lg mb-3">
+                            <i class="fas fa-external-link-alt me-2"></i>
+                            Register Your Win Now
+                        </a>
+                        <p class="small text-muted">Click the button above to officially register your winning number and enter the draw.</p>
                     </div>
                 </div>
             `);
