@@ -1,0 +1,56 @@
+# R20 Competition - Git Ignore File
+
+# Development files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# API configuration (contains sensitive data)
+api/config.php
+
+# Temporary files
+temp/
+tmp/
+
+# Build artifacts
+_site/
+dist/
+build/
+
+# Node.js (if adding build tools later)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# PHP temporary files
+*.php~
+.htaccess
+
+# Database dumps
+*.sql.backup
+*.db
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Cache files
+*.cache
+cache/
+
+# System files
+.htaccess
+robots.txt
+
+# Backup files
+*.bak
+*.backup
+*~

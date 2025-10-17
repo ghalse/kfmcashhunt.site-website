@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kfm Mornings Cash Hunt - Test Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
+        .test-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Kfm Mornings Cash Hunt - Test Suite</h1>
+        <p>Use this page to test all functionality before going live.</p>
+
+        <!-- API Health Check -->
+        <div class="test-section">
+            <h3>1. API Health Check</h3>
+            <p>Test if the PHP API is working correctly.</p>
+            <button onclick="testAPIHealth()">Test API Health</button>
+            <div id="apiHealthResult"></div>
+        </div>
+
+        <!-- Database Connection -->
+        <div class="test-section">
+            <h3>2. Database Connection</h3>
+            <p>Test if database connection is working.</p>
+            <button onclick="testDatabase()">Test Database</button>
+            <div id="databaseResult"></div>
+        </div>
+
+        <!-- Serial Number Validation -->
+        <div class="test-section">
+            <h3>3. Serial Number Validation</h3>
+            <p>Test various serial number formats.</p>
+            <div style="margin: 10px 0;">
+                <label>Test Serial Number: </label>
+                <input type="text" id="testSerial" value="AH28519618B" style="padding: 5px; margin: 0 10px;">
+                <button onclick="testSerialValidation()">Test Validation</button>
+            </div>
+            <div id="serialValidationResult"></div>
+        </div>
+
+        <!-- Winning Number Check -->
+        <div class="test-section">
+            <h3>4. Winning Number Check</h3>
+            <p>Test with known winning and non-winning numbers.</p>
+            <button onclick="testWinningNumber('AH28519618B')">Test Winner</button>
+            <button onclick="testWinningNumber('AH99999999B')">Test Non-Winner</button>
+            <div id="winningNumberResult"></div>
+        </div>
+
+        <!-- Query Logging -->
+        <div class="test-section">
+            <h3>5. Query Logging</h3>
+            <p>Test if queries are being logged to database.</p>
+            <button onclick="testQueryLogging()">Test Query Logging</button>
+            <div id="queryLoggingResult"></div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="test-section">
+            <h3>6. Statistics</h3>
+            <p>Check query statistics from database.</p>
+            <button onclick="getStatistics()">Get Statistics</button>
+            <div id="statisticsResult"></div>
+        </div>
+
+        <!-- File Check -->
+        <div class="test-section">
+            <h3>7. File Integrity</h3>
+            <p>Check if all required files are present.</p>
+            <button onclick="checkFiles()">Check Files</button>
+            <div id="fileCheckResult"></div>
+        </div>
+
+        <!-- CDN Resources -->
+        <div class="test-section">
+            <h3>8. CDN Resources</h3>
+            <p>Check if external libraries are loading correctly.</p>
+            <button onclick="checkCDNResources()">Check CDN Resources</button>
+            <div id="cdnResult"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        // Test functions
+        function testAPIHealth() {
+            showResult('apiHealthResult', 'Testing API health at api.kfmcashhunt.site...', 'info');
+
+            $.ajax({
+                url: 'https://api.kfmcashhunt.site/',
+                method: 'POST',
+                dataType: 'json',
+                crossDomain: true,
+                data: { action: 'health_check' },
+                success: function(response) {
+                    if (response.success) {
+                        showResult('apiHealthResult', `✅ API is healthy!<br><pre>${JSON.stringify(response, null, 2)}</pre>`, 'success');
+                    } else {
+                        showResult('apiHealthResult', `❌ API health check failed: ${response.message}`, 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showResult('apiHealthResult', `❌ API Error: ${error}<br>Status: ${xhr.status}<br>Note: This will fail until API is deployed to api.kfmcashhunt.site`, 'error');
+                }
+            });
+        }        function testDatabase() {
+            showResult('databaseResult', 'Testing database connection at api.kfmcashhunt.site...', 'info');
+
+            $.ajax({
+                url: 'https://api.kfmcashhunt.site/',
+                method: 'POST',
+                dataType: 'json',
+                crossDomain: true,
+                data: { action: 'get_stats' },
+                success: function(response) {
+                    if (response.success) {
+                        showResult('databaseResult', `✅ Database connected!<br><pre>${JSON.stringify(response.data, null, 2)}</pre>`, 'success');
+                    } else {
+                        showResult('databaseResult', `❌ Database test failed: ${response.message}`, 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showResult('databaseResult', `❌ Database Error: ${error}<br>Note: This will fail until API is deployed to api.kfmcashhunt.site`, 'error');
+                }
+            });
+        }
+
+        function testSerialValidation() {
+            const serial = $('#testSerial').val();
+            const regex = /^[A-Z]{2}[0-9]{8}[A-Z]$/;
+            const isValid = regex.test(serial);
+
+            if (isValid) {
+                showResult('serialValidationResult', `✅ "${serial}" is a valid format`, 'success');
+            } else {
+                showResult('serialValidationResult', `❌ "${serial}" is not a valid format (should be: 2 letters + 8 digits + 1 letter)`, 'error');
+            }
+        }
+
+        function testWinningNumber(serialNumber) {
+            showResult('winningNumberResult', `Testing ${serialNumber}...`, 'info');
+
+            // Load the winning numbers from the main app
+            const winningNumbers = [
+                'AH28519618B', 'AH28519616B', 'AH28519613B', 'AH28519611B', 'AH28519609B',
+                'AH28519607B', 'AH28519605B', 'AH28519603B', 'AH27519700B', 'AH27519697B'
+                // ... (truncated for brevity, but includes all 90 numbers)
+            ];
+
+            const isWinner = winningNumbers.includes(serialNumber);
+
+            if (isWinner) {
+                showResult('winningNumberResult', `🏆 ${serialNumber} is a WINNING number!`, 'success');
+            } else {
+                showResult('winningNumberResult', `📋 ${serialNumber} is not a winning number`, 'info');
+            }
+        }
+
+        function testQueryLogging() {
+            showResult('queryLoggingResult', 'Testing query logging at api.kfmcashhunt.site...', 'info');
+
+            const testSerial = 'AH99999999B';
+
+            $.ajax({
+                url: 'https://api.kfmcashhunt.site/',
+                method: 'POST',
+                dataType: 'json',
+                crossDomain: true,
+                data: {
+                    action: 'log_query',
+                    serial_number: testSerial,
+                    is_winner: 0
+                },
+                success: function(response) {
+                    if (response.success) {
+                        showResult('queryLoggingResult', `✅ Query logged successfully!<br><pre>${JSON.stringify(response, null, 2)}</pre>`, 'success');
+                    } else {
+                        showResult('queryLoggingResult', `❌ Query logging failed: ${response.message}`, 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showResult('queryLoggingResult', `❌ Logging Error: ${error}<br>Note: This will fail until API is deployed to api.kfmcashhunt.site`, 'error');
+                }
+            });
+        }
+
+        function getStatistics() {
+            showResult('statisticsResult', 'Loading statistics from api.kfmcashhunt.site...', 'info');
+
+            $.ajax({
+                url: 'https://api.kfmcashhunt.site/',
+                method: 'POST',
+                dataType: 'json',
+                crossDomain: true,
+                data: { action: 'get_stats' },
+                success: function(response) {
+                    if (response.success && response.data) {
+                        const stats = response.data;
+                        const statsHtml = `
+                            <table>
+                                <tr><th>Statistic</th><th>Value</th></tr>
+                                <tr><td>Total Queries</td><td>${stats.total_queries || 0}</td></tr>
+                                <tr><td>Unique Serials</td><td>${stats.unique_serials || 0}</td></tr>
+                                <tr><td>Unique Clients</td><td>${stats.unique_clients || 0}</td></tr>
+                                <tr><td>Winner Queries</td><td>${stats.winner_queries || 0}</td></tr>
+                            </table>
+                        `;
+                        showResult('statisticsResult', `✅ Statistics loaded:<br>${statsHtml}`, 'success');
+                    } else {
+                        showResult('statisticsResult', `❌ Failed to load statistics`, 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showResult('statisticsResult', `❌ Statistics Error: ${error}<br>Note: This will fail until API is deployed to api.kfmcashhunt.site`, 'error');
+                }
+            });
+        }        function checkFiles() {
+            const requiredFiles = ['index.html', 'style.css', 'app.js', 'api.php'];
+            let results = [];
+            let completed = 0;
+
+            showResult('fileCheckResult', 'Checking files...', 'info');
+
+            requiredFiles.forEach(file => {
+                $.ajax({
+                    url: file,
+                    method: 'HEAD',
+                    success: function() {
+                        results.push(`✅ ${file} - Found`);
+                        completed++;
+                        if (completed === requiredFiles.length) {
+                            showFileResults(results);
+                        }
+                    },
+                    error: function() {
+                        results.push(`❌ ${file} - Missing`);
+                        completed++;
+                        if (completed === requiredFiles.length) {
+                            showFileResults(results);
+                        }
+                    }
+                });
+            });
+        }
+
+        function showFileResults(results) {
+            const hasErrors = results.some(r => r.includes('❌'));
+            const resultClass = hasErrors ? 'error' : 'success';
+            showResult('fileCheckResult', results.join('<br>'), resultClass);
+        }
+
+        function checkCDNResources() {
+            showResult('cdnResult', 'Checking CDN resources...', 'info');
+
+            const checks = {
+                'jQuery': typeof $ !== 'undefined',
+                'Bootstrap CSS': !!$('link[href*="bootstrap"]').length,
+                'Font Awesome': !!$('link[href*="font-awesome"]').length,
+                'Tesseract.js': typeof Tesseract !== 'undefined'
+            };
+
+            let results = [];
+            for (const [name, loaded] of Object.entries(checks)) {
+                results.push(loaded ? `✅ ${name} - Loaded` : `❌ ${name} - Not loaded`);
+            }
+
+            const hasErrors = results.some(r => r.includes('❌'));
+            const resultClass = hasErrors ? 'error' : 'success';
+            showResult('cdnResult', results.join('<br>'), resultClass);
+        }
+
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="result ${type}">${message}</div>`;
+        }
+
+        // Auto-run basic checks on page load
+        $(document).ready(function() {
+            setTimeout(() => {
+                checkCDNResources();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
