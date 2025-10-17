@@ -163,9 +163,18 @@ h1 {
     #serialInput {
         font-size: 1rem;
     }
+
+    /* Show camera card on mobile devices */
+    #cameraCard {
+        display: block !important;
+    }
 }
 
 /* OCR specific styles */
+#cameraCard {
+    display: none; /* Hidden by default to prevent flash on load */
+}
+
 #imagePreview img {
     border: 3px dashed #28a745;
     padding: 10px;

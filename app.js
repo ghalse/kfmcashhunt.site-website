@@ -444,11 +444,11 @@ $(document).ready(function() {
         // Only show OCR on mobile devices to avoid camera permission prompts
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-        if (!isMobile) {
-            // Hide entire OCR card on desktop devices
-            $('#cameraCard').hide();
-            return;
+        if (isMobile) {
+            // Show camera card on mobile devices
+            $('#cameraCard').show();
         }
+        // Camera card remains hidden by default for desktop devices (via CSS)
 
         if (typeof Tesseract === 'undefined') {
             $('#cameraSection').append(`

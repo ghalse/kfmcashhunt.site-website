@@ -3955,3 +3955,77 @@ Perfect! I have successfully fixed the Unicode issue and converted all files to 
 The website should now work correctly with all Unicode characters properly displayed, and all new files will automatically use Unix line endings thanks to the updated EditorConfig settings.
 
 Made changes.
+
+ghalse: On the index page, the camera card flashes briefly on page load. Can it be hidden by default and then only shown for mobile devices?
+
+GitHub Copilot: I'll help you fix the camera card flashing issue by hiding it by default and only showing it on mobile devices. First, let me examine the current index.html file to understand the structure and styling.
+
+Read [](file:///v%3A/github/kfmcashhunt.site-website/index.html)
+
+Now let me check the current CSS styles to understand how the styling is currently applied:
+
+Read [](file:///v%3A/github/kfmcashhunt.site-website/style.css)
+
+Now I can see the issue. The camera card (`#cameraCard`) is visible by default and likely causes a brief flash when the page loads. I need to:
+
+1. Hide the camera card by default using CSS
+2. Use JavaScript to show it only on mobile devices
+
+Let me first update the CSS to hide the camera card by default:
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now I need to check the current JavaScript to see how it handles mobile detection and camera functionality:
+
+Read [](file:///v%3A/github/kfmcashhunt.site-website/app.js)
+
+Perfect! I can see that the current JavaScript already has a mobile detection function `checkOCRSupport()` that hides the camera card on desktop devices. However, since we've now hidden the camera card by default in CSS, I need to modify this function to show the camera card only on mobile devices instead of hiding it on desktop.
+
+Let me update the JavaScript to show the camera card on mobile devices:
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now let's also add a CSS media query to ensure the camera card is properly shown on mobile devices, just in case there are any conflicts:
+
+Using "Replace String in File"
+
+
+```
+
+```
+Perfect! I've successfully implemented the solution to prevent the camera card from flashing on page load. Here's what I've done:
+
+## Changes Made:
+
+1. **CSS Changes** (style.css):
+   - Added `display: none;` to `#cameraCard` by default to hide it immediately when the page loads
+   - Added a mobile media query that shows the camera card with `display: block !important;` on devices with screen width ≤ 768px
+
+2. **JavaScript Changes** (app.js):
+   - Modified the `checkOCRSupport()` function to show the camera card on mobile devices using `$('#cameraCard').show()` instead of hiding it on desktop
+   - Simplified the logic since the camera card is now hidden by default
+
+## How it works:
+
+1. **Page Load**: The camera card is hidden by default via CSS, preventing any flash
+2. **Mobile Detection**: JavaScript detects if the user is on a mobile device
+3. **Show on Mobile**: If it's a mobile device, the camera card is shown
+4. **Desktop**: The camera card remains hidden on desktop devices
+
+This approach ensures:
+- ✅ No flash on page load (camera card is hidden by CSS immediately)
+- ✅ Camera functionality only appears on mobile devices (where it makes sense)
+- ✅ Smooth user experience without any visual glitches
+- ✅ Maintains the existing mobile-first approach for the camera feature
+
+The camera card will now only be visible to users on mobile devices and won't cause any flashing issues during page load on any device type.
+
+Made changes.
