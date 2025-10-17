@@ -248,8 +248,8 @@ $(document).ready(function() {
                             <i class="fas fa-exclamation-triangle me-2"></i>
                             <strong>IMPORTANT:</strong> You must register your find to enter the R100,000 draw!
                         </div>
-                        <a href="https://www.primediaplus.com/competitions/win-r100-000-in-the-kfm-mornings-cash-hunt/" 
-                           target="_blank" 
+                        <a href="https://www.primediaplus.com/competitions/win-r100-000-in-the-kfm-mornings-cash-hunt/"
+                           target="_blank"
                            class="btn btn-primary btn-lg mb-3">
                             <i class="fas fa-external-link-alt me-2"></i>
                             Register Your Win Now
