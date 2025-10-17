@@ -149,7 +149,7 @@ function getClientIP() {
  * Validate serial number format
  */
 function validateSerialNumber($serial) {
-    return preg_match('/^[A-Z]{2}[0-9]{8}[A-Z]$/', $serial);
+    return preg_match('/^[A-Z]{2}[0-9]{6,8}[A-Z]$/', $serial);
 }
 
 /**
