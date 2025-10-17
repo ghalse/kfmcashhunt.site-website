@@ -358,44 +358,23 @@ $(document).ready(function() {
 
     // OCR Functionality
     function checkOCRSupport() {
-        // Check if device has camera capability or is mobile
-        checkCameraAvailability().then(hasCamera => {
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        // Only show OCR on mobile devices to avoid camera permission prompts
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-            if (!hasCamera && !isMobile) {
-                // Hide OCR section on desktop without camera
-                $('#cameraSection').hide();
-                return;
-            }
+        if (!isMobile) {
+            // Hide entire OCR card on desktop devices
+            $('#cameraCard').hide();
+            return;
+        }
 
-            if (typeof Tesseract === 'undefined') {
-                $('#cameraSection').append(`
-                    <div class="alert alert-warning mt-3">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        OCR functionality requires internet connection to load.
-                    </div>
-                `);
-            }
-        });
-    }
-
-    function checkCameraAvailability() {
-        return new Promise((resolve) => {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                resolve(false);
-                return;
-            }
-
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(stream => {
-                    // Stop the stream immediately - we just needed to check availability
-                    stream.getTracks().forEach(track => track.stop());
-                    resolve(true);
-                })
-                .catch(() => {
-                    resolve(false);
-                });
-        });
+        if (typeof Tesseract === 'undefined') {
+            $('#cameraSection').append(`
+                <div class="alert alert-warning mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    OCR functionality requires internet connection to load.
+                </div>
+            `);
+        }
     }
 
     function displayImagePreview(file) {
