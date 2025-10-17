@@ -53,6 +53,10 @@ $(document).ready(function() {
         $('#imageInput').on('change', function(e) {
             if (e.target.files && e.target.files[0]) {
                 displayImagePreview(e.target.files[0]);
+                // Automatically process the image after preview
+                setTimeout(() => {
+                    processImageOCR();
+                }, 500); // Small delay to ensure preview loads
             }
         });
 
@@ -272,22 +276,55 @@ $(document).ready(function() {
     }
 
     function displayQueryHistory(data) {
-        if (!data.previous_query) {
+        if (!data.previous_queries) {
             return;
         }
 
         const $historySection = $('#historySection');
         const $historyContent = $('#historyContent');
 
-        const queryDate = new Date(data.previous_query.query_time);
-        const formattedDate = queryDate.toLocaleString();
+        const queryInfo = data.previous_queries;
+        const firstQueryDate = new Date(queryInfo.first_query_time);
+        const formattedFirstDate = firstQueryDate.toLocaleString();
 
-        $historyContent.html(`
-            <div class="previous-query">
+        let historyHtml = `
+            <div class="previous-query mb-3">
                 <i class="fas fa-info-circle me-2"></i>
-                <strong>Note:</strong> This serial number was previously checked on ${formattedDate}
-            </div>
-        `);
+                <strong>Query History:</strong> This serial number was first checked on ${formattedFirstDate}
+        `;
+
+        if (queryInfo.query_count > 1) {
+            historyHtml += ` and has been queried ${queryInfo.query_count} times total`;
+        }
+
+        if (queryInfo.queried_by_same_user) {
+            historyHtml += ` <span class="badge bg-info">Previously checked by you</span>`;
+        } else {
+            historyHtml += ` <span class="badge bg-secondary">Previously checked by others</span>`;
+        }
+
+        historyHtml += `</div>`;
+
+        // Show all timestamps if more than one query
+        if (queryInfo.query_count > 1 && queryInfo.all_timestamps) {
+            historyHtml += `
+                <div class="timestamps">
+                    <small class="text-muted">
+                        <strong>All query times:</strong><br>
+            `;
+
+            queryInfo.all_timestamps.forEach(timestamp => {
+                const date = new Date(timestamp);
+                historyHtml += `• ${date.toLocaleString()}<br>`;
+            });
+
+            historyHtml += `
+                    </small>
+                </div>
+            `;
+        }
+
+        $historyContent.html(historyHtml);
 
         $historySection.show();
     }
@@ -321,14 +358,44 @@ $(document).ready(function() {
 
     // OCR Functionality
     function checkOCRSupport() {
-        if (typeof Tesseract === 'undefined') {
-            $('#cameraSection').append(`
-                <div class="alert alert-warning mt-3">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    OCR functionality requires internet connection to load.
-                </div>
-            `);
-        }
+        // Check if device has camera capability or is mobile
+        checkCameraAvailability().then(hasCamera => {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+            if (!hasCamera && !isMobile) {
+                // Hide OCR section on desktop without camera
+                $('#cameraSection').hide();
+                return;
+            }
+
+            if (typeof Tesseract === 'undefined') {
+                $('#cameraSection').append(`
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        OCR functionality requires internet connection to load.
+                    </div>
+                `);
+            }
+        });
+    }
+
+    function checkCameraAvailability() {
+        return new Promise((resolve) => {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                resolve(false);
+                return;
+            }
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    // Stop the stream immediately - we just needed to check availability
+                    stream.getTracks().forEach(track => track.stop());
+                    resolve(true);
+                })
+                .catch(() => {
+                    resolve(false);
+                });
+        });
     }
 
     function displayImagePreview(file) {
@@ -383,12 +450,12 @@ $(document).ready(function() {
                     processSerialNumber();
                 }
             } else {
-                showError('Could not extract a valid serial number from the image. Please try again with better lighting or enter manually.');
+                showError('Could not extract a valid serial number from the image. Try taking a close-up photo of just the serial number in good lighting, avoiding other text on the banknote.');
             }
         }).catch(function(error) {
             $('#ocrProgress').hide();
             console.error('OCR Error:', error);
-            showError('Failed to process image. Please try again or enter the serial number manually.');
+            showError('Failed to process image. Try taking a close-up photo of just the serial number in good lighting, or enter the serial number manually.');
         });
     }
 

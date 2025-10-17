@@ -189,14 +189,14 @@ function checkRateLimit($client_ip, $max_requests = 100) {
 /**
  * Log a query to the database
  */
-function logQuery($pdo, $serial_number, $is_winner, $client_ip) {
+function logQuery($pdo, $serial_number, $is_winner, $client_ip, $user_agent = null) {
     try {
         $stmt = $pdo->prepare("
-            INSERT INTO query_log (serial_number, is_winner, client_ip, query_time)
-            VALUES (?, ?, ?, datetime('now'))
+            INSERT INTO query_log (serial_number, is_winner, client_ip, query_time, user_agent)
+            VALUES (?, ?, ?, datetime('now'), ?)
         ");
 
-        $result = $stmt->execute([$serial_number, $is_winner, $client_ip]);
+        $result = $stmt->execute([$serial_number, $is_winner, $client_ip, $user_agent]);
 
         if ($result) {
             return $pdo->lastInsertId();
@@ -206,6 +206,52 @@ function logQuery($pdo, $serial_number, $is_winner, $client_ip) {
     } catch (PDOException $e) {
         error_log("Database error: " . $e->getMessage());
         return false;
+    }
+}
+
+/**
+ * Get privacy-friendly previous query information
+ */
+function getPreviousQueryInfo($pdo, $serial_number, $current_ip, $current_user_agent) {
+    try {
+        $stmt = $pdo->prepare("
+            SELECT client_ip, query_time, is_winner, user_agent
+            FROM query_log
+            WHERE serial_number = ?
+            ORDER BY query_time ASC
+        ");
+
+        $stmt->execute([$serial_number]);
+        $results = $stmt->fetchAll();
+
+        if (empty($results)) {
+            return null;
+        }
+
+        // Check if current user has queried this serial before
+        $is_same_user = false;
+        $timestamps = [];
+
+        foreach ($results as $query) {
+            $timestamps[] = $query['query_time'];
+
+            // Check if same IP and user agent (indicating same user)
+            if ($query['client_ip'] === $current_ip &&
+                $query['user_agent'] === $current_user_agent) {
+                $is_same_user = true;
+            }
+        }
+
+        return [
+            'first_query_time' => $results[0]['query_time'],
+            'query_count' => count($results),
+            'all_timestamps' => $timestamps,
+            'queried_by_same_user' => $is_same_user,
+            'first_query_was_winner' => (bool)$results[0]['is_winner']
+        ];
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+        return null;
     }
 }
 
@@ -338,24 +384,25 @@ try {
         case 'log_query':
             $serial_number = strtoupper(trim($input['serial_number'] ?? ''));
             $is_winner = (int)($input['is_winner'] ?? 0);
+            $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
 
             // Validate serial number
             if (!validateSerialNumber($serial_number)) {
                 sendResponse(false, null, 'Invalid serial number format', 400);
             }
 
-            // Check for previous query of this serial number
-            $previous_query = getPreviousQuery($pdo, $serial_number);
+            // Check for previous queries of this serial number (privacy-friendly)
+            $previous_query_info = getPreviousQueryInfo($pdo, $serial_number, $client_ip, $user_agent);
 
             // Log the new query
-            $log_id = logQuery($pdo, $serial_number, $is_winner, $client_ip);
+            $log_id = logQuery($pdo, $serial_number, $is_winner, $client_ip, $user_agent);
 
             $response_data = [
                 'logged' => $log_id !== false,
                 'log_id' => $log_id,
                 'serial_number' => $serial_number,
                 'is_winner' => (bool)$is_winner,
-                'previous_query' => $previous_query
+                'previous_queries' => $previous_query_info
             ];
 
             sendResponse(true, $response_data, 'Query logged successfully');
