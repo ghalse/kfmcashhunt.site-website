@@ -5,24 +5,6 @@
  * Designed to be hosted separately from the static frontend
  */
 
-// PSR-12 use function declarations for required functions
-use function json_encode;
-use function json_decode;
-use function filter_var;
-use function file_get_contents;
-use function file_put_contents;
-use function extension_loaded;
-use function http_response_code;
-use function header;
-use function dirname;
-use function is_dir;
-use function mkdir;
-use function explode;
-use function trim;
-use function array_key_exists;
-use function time;
-use function file_exists;
-
 // Check JSON extension first since we need it for error responses
 if (!extension_loaded('json')) {
     http_response_code(500);
@@ -66,15 +48,10 @@ $db_path = $_ENV['KFM_DB_PATH'] ?? $_SERVER['KFM_DB_PATH'] ?? __DIR__ . '/r20_co
  */
 function getDbConnection($db_path) {
     try {
-        // Debug: Log the database path being used
-        error_log("Attempting to open database at: " . $db_path);
-
         // Ensure directory exists
         $dir = dirname($db_path);
-        error_log("Database directory: " . $dir);
 
         if (!is_dir($dir)) {
-            error_log("Creating directory: " . $dir);
             if (!mkdir($dir, 0755, true)) {
                 error_log("Failed to create directory: " . $dir);
                 throw new Exception("Cannot create database directory: " . $dir);
@@ -89,13 +66,10 @@ function getDbConnection($db_path) {
 
         // Check if database file exists and its permissions
         if (file_exists($db_path)) {
-            error_log("Database file exists, checking permissions...");
             if (!is_writable($db_path)) {
                 error_log("Database file not writable: " . $db_path);
                 throw new Exception("Database file is not writable: " . $db_path);
             }
-        } else {
-            error_log("Database file does not exist, will be created");
         }
 
         $pdo = new PDO(
@@ -108,8 +82,6 @@ function getDbConnection($db_path) {
                 PDO::ATTR_EMULATE_PREPARES => false
             ]
         );
-
-        error_log("Database connection successful");
 
         // Create tables if they don't exist
         createTables($pdo);
