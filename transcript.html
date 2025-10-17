@@ -525,9 +525,9 @@ Made changes.
 
 ghalse: A small adjustment is needed. The static page is going to be hosted on Github Pages, whereas the PHP API needs to be hosted on a different webserver.
 
-Can you refactor the project with this in mind. In particular, can you move all of the API component to a subdirectory so it's clear what must be copied elsewhere. And can you create the Github workflow necessary to publish the static component to Github pages. The API will be hosted on https://mombe.org/kfm/, so can you adjust the calls to reference it there?
+Can you refactor the project with this in mind. In particular, can you move all of the API component to a subdirectory so it's clear what must be copied elsewhere. And can you create the Github workflow necessary to publish the static component to Github pages. The API will be hosted on https://example.org/kfm/, so can you adjust the calls to reference it there?
 
-GitHub Copilot: I'll refactor the project to separate the static GitHub Pages content from the PHP API that will be hosted on mombe.org. Let me organize this properly.
+GitHub Copilot: I'll refactor the project to separate the static GitHub Pages content from the PHP API that will be hosted on example.org. Let me organize this properly.
 
 Created 5 todos
 
@@ -551,7 +551,7 @@ Created [](file:///v%3A/public_html/kfm/api/README.md)
 
 Starting (2/5) *Update JavaScript API calls*
 
-Now let me update the JavaScript to use the mombe.org API endpoint:
+Now let me update the JavaScript to use the example.org API endpoint:
 
 Using "Replace String in File"
 
@@ -666,7 +666,7 @@ I've completely restructured your R20 Competition website for the dual-hosting s
 ├── 🌐 FRONTEND (GitHub Pages)
 │   ├── index.html              # Main application
 │   ├── style.css               # Responsive styling
-│   ├── app.js                  # Client logic + mombe.org API calls
+│   ├── app.js                  # Client logic + example.org API calls
 │   ├── test.html               # Testing suite
 │   ├── .github/workflows/
 │   │   └── pages.yml           # Auto-deployment to GitHub Pages
@@ -674,7 +674,7 @@ I've completely restructured your R20 Competition website for the dual-hosting s
 │   ├── README.md               # Full documentation
 │   └── DEPLOYMENT.md           # Step-by-step deployment guide
 │
-└── 🖥️ API (mombe.org)
+└── 🖥️ API (example.org)
     ├── api/index.php           # Main API endpoint
     ├── api/database_setup.sql  # MySQL schema
     ├── api/config.sample.php   # Configuration template
@@ -685,10 +685,10 @@ I've completely restructured your R20 Competition website for the dual-hosting s
 
 1. **✅ Separated Frontend from Backend**
    - Static files stay in root (for GitHub Pages)
-   - PHP API moved to api subdirectory (for mombe.org)
+   - PHP API moved to api subdirectory (for example.org)
 
 2. **✅ Updated API Endpoints**
-   - All JavaScript now calls `https://mombe.org/kfm/api/`
+   - All JavaScript now calls `https://example.org/kfm/api/`
    - Added `crossDomain: true` for AJAX requests
    - Enhanced CORS headers in PHP for GitHub Pages origin
 
@@ -716,12 +716,12 @@ git push -u origin main
 # Enable Pages in repository settings → Pages → Source: GitHub Actions
 ```
 
-#### **Part 2: mombe.org (API)**
+#### **Part 2: example.org (API)**
 ```bash
 # Upload api/ directory contents to:
-# https://mombe.org/kfm/api/
+# https://example.org/kfm/api/
 
-# Run database setup on mombe.org:
+# Run database setup on example.org:
 mysql -u your_user -p < database_setup.sql
 
 # Configure API:
@@ -730,7 +730,7 @@ cp config.sample.php config.php
 ```
 
 ### 🧪 **Testing:**
-- **Test Page**: test.html now tests the mombe.org API
+- **Test Page**: test.html now tests the example.org API
 - **Winner Number**: `AH28519618B` 🏆
 - **Non-Winner**: `AH99999999B` 📝
 
@@ -740,7 +740,7 @@ The system now has:
 - **Automatic deployment** (GitHub Actions)
 - **Comprehensive error handling** (works even if API is down)
 
-Your website will be lightning-fast on GitHub Pages while still providing rich analytics through the mombe.org API! 🚀
+Your website will be lightning-fast on GitHub Pages while still providing rich analytics through the example.org API! 🚀
 
 ghalse: The competition is called the "Kfm Mornings Cash Hunt", and the prize is R100000. Can you update the index page (and anywhere in the javascript that's relevant) to reflect this? You can also remove the copyright notice from the main page.
 
@@ -1056,7 +1056,7 @@ export KFM_DB_PATH="/var/lib/kfm/r20_competition.db"
 
 ### **🚀 Deployment Instructions:**
 
-1. **Upload API files** to `https://mombe.org/kfm/api/`
+1. **Upload API files** to `https://example.org/kfm/api/`
 
 2. **Set environment variable** in your web server:
    ```bash
@@ -1087,7 +1087,7 @@ The API will now work with SQLite3 and you can set the database location via the
 
 Made changes.
 
-ghalse: The location of the api  has changed from mombe.org.
+ghalse: The location of the api  has changed from example.org.
 
 Can we make references to the API hosted at https://api.kfmcashhunt.site/ (no subdirectory).
 
@@ -1117,7 +1117,7 @@ Using "Replace String in File"
 
 Let me read the test file to see the current content:
 
-Searched text for `mombe.org` (`**/test.html`), 18 results
+Searched text for `example.org` (`**/test.html`), 18 results
 
 Let me use a more targeted replacement approach:
 
@@ -1131,7 +1131,7 @@ Let me check the exact content around those lines:
 
 Read [](file:///v%3A/public_html/kfm/test.html#120-120), lines 120 to 140
 
-I can see the issue - there's a formatting problem with missing newlines. Let me replace all the mombe.org references using a simpler approach:
+I can see the issue - there's a formatting problem with missing newlines. Let me replace all the example.org references using a simpler approach:
 
 Ran terminal command: (Get-Content "v:\public_html\kfm\test.html") -replace "https://mombe\.org/kfm/api/", "https://api.kfmcashhunt.site/" | Set-Content "v:\public_html\kfm\test.html"
 
@@ -1141,7 +1141,7 @@ Now let me update the API's health check response to reflect the new server:
 
 Read [](file:///v%3A/public_html/kfm/api/index.php#240-240), lines 240 to 250
 
-Searched text for `mombe.org` (`**/api/index.php`), 2 results
+Searched text for `example.org` (`**/api/index.php`), 2 results
 
 Using "Replace String in File"
 
@@ -3455,6 +3455,66 @@ Source: https://kfmcashhunt.site/transcript.html
 ```
 
 Now users can easily download the complete development conversation as a clean, readable text file for offline reference or sharing! 🎉✨
+
+Made changes.
+
+ghalse: A tester has found a bug! In your input validation on the main page, when it says "Valid format" this is not cleared between inputs resulting in appearing multiple times.
+
+GitHub Copilot: I can see the issue! The validation message isn't being cleared properly between inputs, causing "Valid format" messages to stack up. Let me check the current validation code and fix this bug.
+
+Read [](file:///v%3A/public_html/kfm/app.js#75-75), lines 75 to 100
+
+Let me find the formatSerialInput function where the validation messages are displayed:
+
+Searched text for `formatSerialInput|Valid format|validation-message` (`**/app.js`), 16 results
+
+Now let me examine the formatSerialInput function to see the issue:
+
+Read [](file:///v%3A/public_html/kfm/app.js#135-135), lines 135 to 185
+
+I found the bug! The issue is on line 163 where it's only removing `.invalid-feedback` but not clearing all feedback messages (both valid and invalid). The `valid-feedback` messages are stacking up because they're not being removed. Let me fix this:
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now let me also check the `clearValidationStyles` function to ensure it properly removes all feedback:
+
+Searched text for `clearValidationStyles` (`**/app.js`), 12 results
+
+Read [](file:///v%3A/public_html/kfm/app.js#189-189), lines 189 to 199
+
+Good! The `clearValidationStyles()` function is already correctly removing both valid and invalid feedback using `nextAll('.invalid-feedback, .valid-feedback')`. However, the issue is that in the `validateSerialFormat` function, I need to make sure we're removing all feedback properly. Let me check if there might be multiple feedback elements that need removing:
+
+Using "Replace String in File"
+
+
+```
+
+```
+Perfect! ✅ I've fixed the validation bug. The issue was in the `validateSerialFormat` function where it was only removing `.invalid-feedback` elements but not the `.valid-feedback` elements, causing "Valid format" messages to stack up.
+
+## 🐛 **Bug Fixed:**
+
+### **Problem:**
+- The validation was only removing `.invalid-feedback` messages
+- `.valid-feedback` messages (showing "Valid format") were accumulating with each keystroke
+- This resulted in multiple "Valid format" messages appearing on screen
+
+### **Solution:**
+- Changed from `$input.next('.invalid-feedback').remove()` and `$input.next('.valid-feedback').remove()`
+- To `$input.nextAll('.invalid-feedback, .valid-feedback').remove()`
+- This removes ALL feedback messages (both valid and invalid) before adding new ones
+- Uses `nextAll()` instead of `next()` to catch any multiple feedback elements
+
+### **Result:**
+- ✅ Only one validation message shows at a time
+- ✅ Messages are properly cleared between inputs
+- ✅ No more stacking of "Valid format" messages
+
+The validation will now work correctly, showing only one feedback message at a time and properly clearing previous messages before displaying new ones! 🎉
 
 Made changes.
 ]]>
