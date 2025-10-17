@@ -405,7 +405,7 @@ footer .text-muted {
 
 /* Hidden elements */
 .hidden {
-    display: none !important;
+    display: none;
 }
 
 /* Image preview max height */
