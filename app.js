@@ -1,7 +1,9 @@
 // R20 Competition - Client-side JavaScript
 $(document).ready(function() {
     // List of winning serial numbers (client-side validation)
+    // Official list from: https://www.primediaplus.com/sites/kfm-mornings-shoprite-money-market-cash-hunt-2025/
     const winningNumbers = [
+        // Complete list of all 100 winning serial numbers
         'AH28519618B', 'AH28519616B', 'AH28519613B', 'AH28519611B', 'AH28519609B',
         'AH28519607B', 'AH28519605B', 'AH28519603B', 'AH27519700B', 'AH27519697B',
         'AH27519695B', 'AH27519693B', 'AH27519691B', 'AH27519689B', 'AH27519687B',
@@ -271,7 +273,7 @@ $(document).ready(function() {
                         <p class="lead mb-3">Serial Number: <strong>${serialNumber}</strong></p>
                         <p class="mb-0">Sorry, this number is not a winning number. Better luck next time!</p>
                         <hr class="my-3 bg-white">
-                        <small class="text-light">Keep trying with other R20 notes - there are 90 chances to enter the draw!</small>
+                        <small class="text-light">Keep trying with other R20 notes - there are ${winningNumbers.length} chances to enter the draw!</small>
                     </div>
                 </div>
             `);
